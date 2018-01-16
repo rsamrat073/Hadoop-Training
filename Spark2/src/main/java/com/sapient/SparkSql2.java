@@ -29,6 +29,8 @@ public class SparkSql2 {
 	}
 
 	public static Dataset<Row> getTransactionRDD(SparkSession spark) {
+		
+		
 		JavaRDD<Tax> taxRDD = spark.read().textFile("C:\\BigData\\txns").javaRDD().map(line -> {
 			String[] parts = line.split(",");
 			Tax person = new Tax();

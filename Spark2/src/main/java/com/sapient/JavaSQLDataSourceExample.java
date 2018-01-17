@@ -100,11 +100,11 @@ public class JavaSQLDataSourceExample {
       
       .getOrCreate();
 
-    runBasicDataSourceExample(spark);
+    //runBasicDataSourceExample(spark);
     //runBasicParquetExample(spark);
    // runParquetSchemaMergingExample(spark);
    // runJsonDatasetExample(spark);
-    //runJdbcDatasetExample(spark);
+    runJdbcDatasetExample(spark);
 
     spark.stop();
   }

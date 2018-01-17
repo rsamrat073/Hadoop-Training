@@ -53,13 +53,14 @@ public final class JavaKafkaWordCount {
   }
 
   public static void main(String[] args) throws Exception {
+	  System.setProperty("hadoop.home.dir", "C:\\Users\\TEMP\\Desktop\\SparkWS\\");
     if (args.length < 4) {
       System.err.println("Usage: JavaKafkaWordCount <zkQuorum> <group> <topics> <numThreads>");
       System.exit(1);
     }
 
     //StreamingExamples.setStreamingLogLevels();
-    SparkConf sparkConf = new SparkConf().setAppName("JavaKafkaWordCount");
+    SparkConf sparkConf = new SparkConf().setAppName("JavaKafkaWordCount").setMaster("local[*]");
     // Create the context with 2 seconds batch size
     JavaStreamingContext jssc = new JavaStreamingContext(sparkConf, new Duration(2000));
 

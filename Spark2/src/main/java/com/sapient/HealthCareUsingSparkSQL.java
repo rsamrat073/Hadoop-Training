@@ -37,9 +37,9 @@ public class HealthCareUsingSparkSQL {
 		usersDF = usersDF.toDF("id", "un", "dob", "cont1", "mailId", "cont2", "gender", "disease", "weight");
 
 		usersDF.write().partitionBy("gender","disease").bucketBy(5, "mailId").format("orc")
-				.saveAsTable("HEALTH_CARE");
-		 //spark.sql("REFRESH TABLE HEALTH_CARE");
-		//usersDF = spark.sql("select * from HEALTH_CARE limit 30 ");
+				.saveAsTable("HEALTH_CARE1");
+		 spark.sql("REFRESH TABLE HEALTH_CARE");
+		usersDF = spark.sql("select * from HEALTH_CARE1 limit 30 ");
 		usersDF.show();
 	}
 }

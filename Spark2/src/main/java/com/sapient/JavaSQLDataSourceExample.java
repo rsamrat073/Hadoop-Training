@@ -16,6 +16,7 @@
  */
 package com.sapient;
 
+import java.io.File;
 // $example on:schema_merging$
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -95,7 +96,8 @@ public class JavaSQLDataSourceExample {
     SparkSession spark = SparkSession
       .builder().master("local[*]")
       .appName("Java Spark SQL data sources example")
-      .config("spark.some.config.option", "some-value")
+      .config("spark.sql.warehouse.dir", new File("spark-warehouse").getAbsolutePath())
+      
       .getOrCreate();
 
     runBasicDataSourceExample(spark);
@@ -108,18 +110,23 @@ public class JavaSQLDataSourceExample {
   }
 
   private static void runBasicDataSourceExample(SparkSession spark) {
-    // $example on:generic_load_save_functions$
-    Dataset<Row> usersDF = spark.read().load("examples/src/main/resources/users.parquet");
+    
+	  
+	  
+	  
+	  // $example on:generic_load_save_functions$
+    Dataset<Row> usersDF = spark.read().load("src/main/resources/users.parquet");
     usersDF.select("name", "favorite_color").write().save("namesAndFavColors.parquet");
     // $example off:generic_load_save_functions$
     // $example on:manual_load_options$
     Dataset<Row> peopleDF =
-      spark.read().format("json").load("examples/src/main/resources/people.json");
+      spark.read().format("json").load("src/main/resources/people.json");
     peopleDF.select("name", "age").write().format("parquet").save("namesAndAges.parquet");
     // $example off:manual_load_options$
     // $example on:direct_sql$
     Dataset<Row> sqlDF =
-      spark.sql("SELECT * FROM parquet.`examples/src/main/resources/users.parquet`");
+      spark.sql("SELECT * FROM parquet.`src/main/resources/users.parquet`");
+    sqlDF.show();
     // $example off:direct_sql$
     // $example on:write_sorting_and_bucketing$
     peopleDF.write().bucketBy(42, "name").sortBy("age").saveAsTable("people_bucketed");
@@ -128,19 +135,20 @@ public class JavaSQLDataSourceExample {
     usersDF
       .write()
       .partitionBy("favorite_color")
-      .format("parquet")
+      .format("orc")
       .save("namesPartByColor.parquet");
     // $example off:write_partitioning$
     // $example on:write_partition_and_bucket$
     peopleDF
       .write()
-      .partitionBy("favorite_color")
-      .bucketBy(42, "name")
+      .partitionBy("name")
+      .bucketBy(42, "age")
       .saveAsTable("people_partitioned_bucketed");
+    
     // $example off:write_partition_and_bucket$
 
-    spark.sql("DROP TABLE IF EXISTS people_bucketed");
-    spark.sql("DROP TABLE IF EXISTS people_partitioned_bucketed");
+    
+    spark.sql("select * from  people_partitioned_bucketed").show();
   }
 
   private static void runBasicParquetExample(SparkSession spark) {

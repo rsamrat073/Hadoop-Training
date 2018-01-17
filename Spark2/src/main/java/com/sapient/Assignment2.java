@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Comparator;
 import java.util.Iterator;
 
+import org.apache.hadoop.hive.ql.parse.HiveParser.databaseComment_return;
 import org.apache.spark.Partitioner;
 import org.apache.spark.api.java.JavaPairRDD;
 import org.apache.spark.api.java.JavaRDD;
@@ -63,8 +64,14 @@ public class Assignment2 {
 		maxPriceSymbolRDD.saveAsTextFile("stock_min_max");
 		JavaPairRDD<String, Iterable<Double>> stockGroupedData = maxPriceSymbolRDD.groupByKey(new CustomPartition());
 
-//		JavaRDD<Double> minMaxForPartition = stockGroupedData.mapPartitions(f)
-		
+		stockGroupedData.mapPartitions((FlatMapFunction<Iterator<Tuple2<String, Iterable<Double>>>, String>) data -> {
+			
+			Tuple2<String, Iterable<Double>> t = data.next();
+			Double min=t._2().iterator().next();
+			return null;
+
+		});
+
 	}
 
 }

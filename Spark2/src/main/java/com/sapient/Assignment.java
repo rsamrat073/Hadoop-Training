@@ -16,7 +16,7 @@ import scala.Tuple2;
 public class Assignment {
 
 	public static void main(String[] args) throws Exception {
-		System.setProperty("hadoop.home.dir", "C:\\Users\\TEMP\\Desktop\\SparkWS\\");
+		System.setProperty("hadoop.home.dir", "D:\\Hadoop Materials\\");
 
 		SparkSession spark = SparkSession.builder().master("local[*]").appName("JavaWordCount").getOrCreate();
 		SparkContext jsc = spark.sparkContext();

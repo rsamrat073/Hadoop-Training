@@ -68,6 +68,9 @@ public class Assignment2 {
 			
 			Tuple2<String, Iterable<Double>> t = data.next();
 			Double min=t._2().iterator().next();
+			
+			
+			
 			return null;
 
 		});

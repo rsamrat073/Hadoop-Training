@@ -9,7 +9,6 @@ import java.util.Properties;
 
 import org.apache.spark.api.java.function.MapFunction;
 import org.apache.spark.sql.Dataset;
-import org.apache.spark.sql.Encoders;
 import org.apache.spark.sql.Row;
 import org.apache.spark.sql.SparkSession;
 

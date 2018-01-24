@@ -58,6 +58,6 @@ public class GettingStarted {
 		}
  
 		// Clean up the connection by closing it
-    //cluster.close();
+    cluster.close();
 	}
 }

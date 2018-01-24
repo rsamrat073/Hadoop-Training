@@ -6,6 +6,7 @@ import com.datastax.driver.core.policies.RoundRobinPolicy;
 public class GettingStarted2 {
 
 	public static void main(String[] args) {
+		System.out.println("asas");
 
 		Cluster cluster;
 		Session session;
@@ -17,25 +18,22 @@ public class GettingStarted2 {
 
 				.withLoadBalancingPolicy(policyObject)
 
-				.withQueryOptions(new QueryOptions().setConsistencyLevel(ConsistencyLevel.ONE)) 
-				.build();	
+				.withQueryOptions(new QueryOptions().setConsistencyLevel(ConsistencyLevel.ONE)).build();
 
 		session = cluster.connect("samrat_keyspace");
 
-		
-		ResultSet results = session.execute("SELECT * FROM employees1 ");
-		for (Row row : results) {
-			System.out.println(row.getString("city"));
-		}
+		ResultSet results = session
+				.execute("insert into employees JSON '{'id':1,'name':'Mukesh','city':'BLR','dept':150}'");
+		//for (Row row : results) {
+			//System.out.println(row.getString("city"));
+		//}
 
-//		session.execute("update users1 set age = 36 where lastname = 'Jones'");
-//
+		//session.execute("update users1 set age = 36 where lastname = 'Jones'");
+
 //		results = session.execute("select * from users1 where lastname='Jones'");
 //		for (Row row : results) {
 //			System.out.format("%s %d\n", row.getString("firstname"), row.getInt("age"));
 //		}
-
-	
 
 		cluster.close();
 	}

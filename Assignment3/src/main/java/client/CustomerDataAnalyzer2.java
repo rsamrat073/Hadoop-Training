@@ -18,7 +18,7 @@ public class CustomerDataAnalyzer2 {
 
 		JavaRDD<String> custAll = SparkContext.getContext()
 				.textFile(new File(
-						"D:\\GitHUB\\BigData\\Hadoop-Training\\Assignment3\\src\\main\\resources\\customers.csv")
+						"D:\\GitHUB\\BigData\\Hadoop-Training\\Assignment3\\src\\main\\resources\\customers_with_delimiters.csv")
 								.getAbsolutePath());
 		String header = custAll.first();
 		custs = custAll.filter(data -> !data.equals(header)).map(line -> {
@@ -27,15 +27,17 @@ public class CustomerDataAnalyzer2 {
 			if (((String) line).contains("\"")) {
 
 				pWithCommaAndQuotes = line.split("\"");
+				//Arrays.asList(pWithCommaAndQuotes[2].split(",")).forEach(s->System.out.println(s));
+				
 				cust.setCustomerID(Integer.parseInt(pWithCommaAndQuotes[0].split(",")[0]));
 				cust.setCustomerFirstName(pWithCommaAndQuotes[0].split(",")[1]);
 				cust.setCustomerSecondName(pWithCommaAndQuotes[0].split(",")[2]);
 				cust.setCustomerEmailID(pWithCommaAndQuotes[0].split(",")[3]);
 				cust.setCustomerPassword(pWithCommaAndQuotes[0].split(",")[4]);
-				cust.setCustomerStreetAddr(pWithCommaAndQuotes[1].replace(",", " "));
-				cust.setCustomerCity(pWithCommaAndQuotes[2].split(",")[0]);
-				cust.setCustomerState(pWithCommaAndQuotes[2].split(",")[1]);
-				cust.setCustomerAddrZip(Integer.parseInt(pWithCommaAndQuotes[2].split(",")[2]));
+				cust.setCustomerStreetAddr(pWithCommaAndQuotes[1].replace(","," "));
+				cust.setCustomerCity(pWithCommaAndQuotes[2].split(",")[1]);
+				cust.setCustomerState(pWithCommaAndQuotes[2].split(",")[2]);
+				cust.setCustomerAddrZip(Integer.parseInt(pWithCommaAndQuotes[2].split(",")[3]));
 			} else {
 				pWithCommaAndQuotes = line.split(",");
 				cust.setCustomerID(Integer.parseInt(pWithCommaAndQuotes[0]));

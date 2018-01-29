@@ -17,7 +17,7 @@ public class SparkContext {
 
 		if (spContext == null) {
 			// Setup Spark configuration
-			System.setProperty("hadoop.home.dir", "C:\\Users\\samra\\Desktop\\Sapient\\Hadoop Materials\\");
+			System.setProperty("hadoop.home.dir", "D:\\GitHUB\\BigData\\Hadoop-Training\\Spark2\\");
 			SparkConf conf = new SparkConf().setAppName(appName).setMaster(sparkMaster).setSparkHome("C:\\Users\\samra\\");
 			spContext = new JavaSparkContext(conf);
 

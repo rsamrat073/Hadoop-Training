@@ -1,6 +1,7 @@
 package client;
 
 import java.io.File;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.function.BiFunction;
@@ -56,12 +57,13 @@ public class CustomerDataAnalyzer {
 	}
 
 	public void displayCustomerAddress() {
-
+		//System.out.println(Arrays.asList(custs.collect().get(1).getCustomerStreetAddr().split(" ")));
 		Map<String, String> refMap = refsAddr.collectAsMap();
 		custs.collect().forEach(s -> {
-			if(refMap.get(s.getCustomerStreetAddr().split(" ")[2])!=null){
-				s.setCustomerStreetAddr(s.getCustomerStreetAddr().replace(s.getCustomerStreetAddr().split(" ")[2],
-						refMap.get(s.getCustomerStreetAddr().split(" ")[2])));
+
+			if(refMap.get(s.getCustomerStreetAddr().split(" ")[s.getCustomerStreetAddr().split(" ").length-1])!=null){
+				s.setCustomerStreetAddr(s.getCustomerStreetAddr().replace(s.getCustomerStreetAddr().split(" ")[s.getCustomerStreetAddr().split(" ").length-1],
+						refMap.get(s.getCustomerStreetAddr().split(" ")[s.getCustomerStreetAddr().split(" ").length-1])));
 			}
 			System.out.println(s);
 

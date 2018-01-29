@@ -2,6 +2,8 @@ package client;
 
 import java.io.File;
 
+import org.apache.spark.sql.Dataset;
+import org.apache.spark.sql.Row;
 import org.apache.spark.sql.SparkSession;
 
 public class CustomerDataAnalyzer3 {
@@ -21,7 +23,12 @@ public class CustomerDataAnalyzer3 {
 	
 	public void createDBRetail(){
 		
-		spark.read().load("");
+		Dataset<Row> t=spark.read().option("header", true).csv("D:\\GitHUB\\BigData\\Hadoop-Training\\Assignment3\\src\\main\\resources\\customers.csv");
+		t.show();
+		t.withColumnRenamed("customer_street ", "customer_street")
+		.write()
+		.format("parquet")
+	     .save("customers.parquet");
 		
 	}
 	

@@ -20,7 +20,7 @@ public class EmployeeDataAnalyzer {
 	public EmployeeDataAnalyzer() {
 
 		JavaRDD<String> empsAll = SparkContext.getContext().textFile(new File(
-				"C:\\Users\\samra\\Desktop\\Sapient\\Spark Beginnig\\Assignment3\\src\\main\\resources\\employees.txt")
+				"src\\main\\resources\\employees.txt")
 						.getAbsolutePath());
 		String header = empsAll.first();
 		emps = empsAll.filter(data -> !data.equals(header)).map(line -> {
@@ -39,13 +39,16 @@ public class EmployeeDataAnalyzer {
 
 	}
 
-	public void getEmployeeSalesPerMonth() {
-		emps.map(data ->
-
-		new Tuple2<>(data.getEmpNumber(), "Month->" + data.getMonth() + " Sales->" + data.getSlaesPerMonth())
-
-		).groupBy(data -> data._1()).collect().stream().forEach(data -> System.out.println(data._2()));
-
+	public void getEmployeeSalesPerYear() {
+		
+		//Total Sales per Month
+		emps.mapToPair(data->new Tuple2<>(data.getEmpNumber(),data.getSlaesPerMonth()))
+		.reduceByKey((x,y)->x.floatValue()+y.floatValue()).collect().forEach(s->System.out.println(s));
+		
+		//Total Sales per Year
+		emps.mapToPair(data->new Tuple2<>(data.getEmpNumber(),data.getSlaesPerYear()))
+		.reduceByKey((x,y)->x.floatValue()+y.floatValue()).collect().forEach(s->System.out.println(s));
+	
 	}
 
 	public void calculateTotalSalePerEmployee() {
@@ -79,7 +82,7 @@ public class EmployeeDataAnalyzer {
 
 	public static void main(String[] args) {
 
-		new EmployeeDataAnalyzer().maxMinSalesOverYear();
+		new EmployeeDataAnalyzer().getEmployeeSalesPerYear();
 
 	}
 

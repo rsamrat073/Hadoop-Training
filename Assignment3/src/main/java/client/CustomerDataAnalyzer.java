@@ -57,14 +57,18 @@ public class CustomerDataAnalyzer {
 	}
 
 	public void displayCustomerAddress() {
-		//System.out.println(Arrays.asList(custs.collect().get(1).getCustomerStreetAddr().split(" ")));
+		
 		Map<String, String> refMap = refsAddr.collectAsMap();
 		custs.collect().forEach(s -> {
 
-			if(refMap.get(s.getCustomerStreetAddr().split(" ")[s.getCustomerStreetAddr().split(" ").length-1])!=null){
-				s.setCustomerStreetAddr(s.getCustomerStreetAddr().replace(s.getCustomerStreetAddr().split(" ")[s.getCustomerStreetAddr().split(" ").length-1],
-						refMap.get(s.getCustomerStreetAddr().split(" ")[s.getCustomerStreetAddr().split(" ").length-1])));
+			String[] t=s.getCustomerStreetAddr().split(" ");
+			for(String s1:t){
+				if(refMap.containsKey(s1)){
+					
+					s.setCustomerStreetAddr(s.getCustomerStreetAddr().replace(s1, refMap.get(s1)));
+				}
 			}
+
 			System.out.println(s);
 
 		});

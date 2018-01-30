@@ -8,6 +8,9 @@ import java.util.function.BiFunction;
 
 import org.apache.spark.api.java.JavaPairRDD;
 import org.apache.spark.api.java.JavaRDD;
+import org.apache.spark.api.java.JavaSparkContext;
+import org.apache.spark.broadcast.Broadcast;
+import org.apache.spark.sql.SparkSession;
 
 import model.Customer;
 import model.ReferenceAddress;
@@ -23,7 +26,7 @@ public class CustomerDataAnalyzer {
 
 		JavaRDD<String> custAll = SparkContext.getContext()
 				.textFile(new File(
-						"D:\\GitHUB\\BigData\\Hadoop-Training\\Assignment3\\src\\main\\resources\\customers.csv")
+						"src\\main\\resources\\customers.csv")
 								.getAbsolutePath());
 		String header = custAll.first();
 		custs = custAll.filter(data -> !data.equals(header)).map(line -> {
@@ -44,7 +47,7 @@ public class CustomerDataAnalyzer {
 
 		JavaRDD<String> refAll = SparkContext.getContext()
 				.textFile(new File(
-						"D:\\GitHUB\\BigData\\Hadoop-Training\\Assignment3\\src\\main\\resources\\referencedata.csv")
+						"src\\main\\resources\\referencedata.csv")
 								.getAbsolutePath());
 
 		refsAddr = refAll.mapToPair(data -> {
@@ -57,15 +60,21 @@ public class CustomerDataAnalyzer {
 	}
 
 	public void displayCustomerAddress() {
-		
+
 		Map<String, String> refMap = refsAddr.collectAsMap();
+		
+		//Broadcasting the variable
+		JavaSparkContext sc = SparkContext.getContext();
+		Broadcast<Map<String, String>> broadCastVar = sc.broadcast(refMap);
+		
+		
 		custs.collect().forEach(s -> {
 
-			String[] t=s.getCustomerStreetAddr().split(" ");
-			for(String s1:t){
-				if(refMap.containsKey(s1)){
-					
-					s.setCustomerStreetAddr(s.getCustomerStreetAddr().replace(s1, refMap.get(s1)));
+			String[] t = s.getCustomerStreetAddr().split(" ");
+			for (String s1 : t) {
+				if (broadCastVar.getValue().containsKey(s1)) {
+
+					s.setCustomerStreetAddr(s.getCustomerStreetAddr().replace(s1, broadCastVar.getValue().get(s1)));
 				}
 			}
 
@@ -73,8 +82,6 @@ public class CustomerDataAnalyzer {
 
 		});
 	}
-
-	
 
 	public static void main(String[] args) {
 		new CustomerDataAnalyzer().displayCustomerAddress();

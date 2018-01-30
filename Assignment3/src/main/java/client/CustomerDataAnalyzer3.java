@@ -22,7 +22,7 @@ public class CustomerDataAnalyzer3 {
 		spark.sql("drop table customer_avro");
 		Dataset<Row> dstable = null;
 
-		dstable = spark.read().option("header", true).csv("D:/GitHUB/BigData/Hadoop-Training/Assignment3/src/main/resources/customers.csv");
+		dstable = spark.read().option("header", true).csv("src/main/resources/customers.csv");
 		dstable.show();
 		dstable.withColumnRenamed("customer_street ", "customer_street").write().format("com.databricks.spark.avro")
 				.saveAsTable("customer_avro");

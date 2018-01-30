@@ -18,7 +18,7 @@ public class CustomerDataAnalyzer2 {
 
 		JavaRDD<String> custAll = SparkContext.getContext()
 				.textFile(new File(
-						"D:\\GitHUB\\BigData\\Hadoop-Training\\Assignment3\\src\\main\\resources\\customers_with_delimiters.csv")
+						"src\\main\\resources\\customers_with_delimiters.csv")
 								.getAbsolutePath());
 		String header = custAll.first();
 		custs = custAll.filter(data -> !data.equals(header)).map(line -> {

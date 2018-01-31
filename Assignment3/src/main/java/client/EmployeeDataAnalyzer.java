@@ -1,14 +1,13 @@
 package client;
 
 import java.io.File;
-import java.util.List;
 
-import org.apache.derby.tools.sysinfo;
 import org.apache.spark.api.java.JavaPairRDD;
 import org.apache.spark.api.java.JavaRDD;
-import org.apache.spark.api.java.function.Function2;
+import org.apache.spark.sql.Dataset;
+import org.apache.spark.sql.Row;
+import org.apache.spark.sql.SparkSession;
 
-import breeze.linalg.min;
 import model.Employee;
 import scala.Tuple2;
 import utils.SparkContext;
@@ -16,10 +15,18 @@ import utils.SparkContext;
 public class EmployeeDataAnalyzer {
 
 	private JavaRDD<Employee> emps;
+	
+	
+	private SparkSession spark;
 
 	public EmployeeDataAnalyzer() {
 
-		JavaRDD<String> empsAll = SparkContext.getContext()
+		System.setProperty("hadoop.home.dir", "D:\\GitHUB\\BigData\\Hadoop-Training\\Spark2\\");
+		String warehouseLocation = new File("spark-warehouse").getAbsolutePath();
+		spark = SparkSession.builder().master("local[*]").appName("Customer Data")
+				.config("spark.sql.warehouse.dir", warehouseLocation).enableHiveSupport().getOrCreate();
+		
+		JavaRDD<String> empsAll = SparkContext.getContext(spark.sparkContext())
 				.textFile(new File("src\\main\\resources\\employees.txt").getAbsolutePath());
 		String header = empsAll.first();
 		emps = empsAll.filter(data -> !data.equals(header)).map(line -> {
@@ -35,6 +42,8 @@ public class EmployeeDataAnalyzer {
 
 			return e;
 		});
+		
+		
 
 	}
 
@@ -90,9 +99,21 @@ public class EmployeeDataAnalyzer {
 
 	}
 
+	
+	public void getTotalSalesPerYear(){
+		
+		spark.sql("use retail_db");
+		spark.createDataFrame(emps, Employee.class).createOrReplaceTempView("employees");
+		spark.sql("select empNumber,sum(slaesPerMonth),month from retail_db.employees group by empNumber,month order by empNumber").show();
+		                                                     
+		
+		
+	}
+	
+	
 	public static void main(String[] args) {
 
-		new EmployeeDataAnalyzer().maxMinAvgSalesOverMonth();
+		new EmployeeDataAnalyzer().getTotalSalesPerYear();
 
 	}
 

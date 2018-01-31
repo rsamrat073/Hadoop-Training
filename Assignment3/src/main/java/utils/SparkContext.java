@@ -32,6 +32,14 @@ public class SparkContext {
 		}
 		return spContext;
 	}
+	
+	public static JavaSparkContext getContext(org.apache.spark.SparkContext contxt) {
+
+		if (spContext == null) {
+			spContext =new JavaSparkContext(contxt);
+		}
+		return spContext;
+	}
 
 	public static JavaSparkContext getContext(String appName) {
 

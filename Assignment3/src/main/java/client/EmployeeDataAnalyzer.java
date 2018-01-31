@@ -104,10 +104,10 @@ public class EmployeeDataAnalyzer {
 		
 		spark.sql("use retail_db");
 		//spark.createDataFrame(emps, Employee.class).createOrReplaceTempView("employees");
-		spark.sql("select empNumber,sum(slaesPerMonth) as TOTALSALES from employess group by empNumber order by empNumber").repartition(1).write().format("json").save("src\\main\\resources\\problem_1.1");;
-		spark.sql("select empNumber,sum(slaesPerYear) as TOTALSALES from employess group by empNumber order by empNumber").repartition(1).write().format("json").save("src\\main\\resources\\problem_1.2");;
-		spark.sql("select empNumber,avg(slaesPerMonth) as AVGSALES from employess group by empNumber order by empNumber").repartition(1).write().format("json").save("src\\main\\resources\\problem_1.3");;
-		spark.sql("select empNumber,min(slaesPerYear) as MINSALE,max(slaesPerYear) as MAXSALE from employess group by empNumber order by empNumber").repartition(1).write().format("json").save("src\\main\\resources\\problem_1.4");;
+		spark.sql("select empNumber,sum(slaesPerMonth) as TOTALSALES from employess group by empNumber order by empNumber").repartition(1).write().format("json").save("src\\main\\resources\\problem_1.1\\");;
+		spark.sql("select empNumber,sum(slaesPerYear) as TOTALSALES from employess group by empNumber order by empNumber").repartition(1).write().format("json").save("src\\main\\resources\\problem_1.2");
+		spark.sql("select empNumber,avg(slaesPerMonth) as AVGSALES from employess group by empNumber order by empNumber").repartition(1).write().format("json").save("src\\main\\resources\\problem_1.3");
+		spark.sql("select empNumber,min(slaesPerYear) as MINSALE,max(slaesPerYear) as MAXSALE from employess group by empNumber order by empNumber").repartition(1).write().format("json").save("src\\main\\resources\\problem_1.4");
 		
 	}
 	
